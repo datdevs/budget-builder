@@ -1,3 +1,8 @@
-<button [class]="buttonClass()" [disabled]="disabled()" [type]="actionType()" (click)="clickHandler.emit($event)">
+<button
+  [class]="buttonClass()"
+  [disabled]="disabled()"
+  [type]="actionType()"
+  (click)="!disabled() && clickHandler.emit($event)"
+>
   <ng-content></ng-content>
 </button>

@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../../../components/button/button.component';
 import { DatetimePickerComponent } from '../../../../components/datetime-picker/datetime-picker.component';
 import { MonthRangeForm } from '../../../../types/forms';
 import { CARD } from '../../../../utils/tailwindcss';
+import { BudgetService } from '../../services';
 
 @Component({
   selector: 'app-filter-bar',
@@ -16,13 +17,17 @@ export class FilterBarComponent {
   cssCard = CARD;
 
   monthRangeForm = new FormGroup<MonthRangeForm>({
-    startMonth: new FormControl<string>('2024-01', { nonNullable: true }),
-    endMonth: new FormControl<string>('2024-12', { nonNullable: true }),
+    startMonth: new FormControl<string>('', { nonNullable: true }),
+    endMonth: new FormControl<string>('', { nonNullable: true }),
   });
 
+  private readonly budgetService = inject(BudgetService);
+
   constructor() {
-    this.monthRangeForm.valueChanges.subscribe((value) => {
-      console.log(value);
-    });
+    this.monthRangeForm.patchValue(this.budgetService.getMonthRange());
+  }
+
+  applyMonthRange(): void {
+    this.budgetService.setMonthRange(this.monthRangeForm.getRawValue());
   }
 }

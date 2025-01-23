@@ -32,6 +32,10 @@ export class ButtonComponent {
         break;
     }
 
+    if (this.disabled()) {
+      classes.push('opacity-50 cursor-not-allowed');
+    }
+
     return classes.join(' ');
   });
 }
