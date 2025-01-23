@@ -8,14 +8,7 @@ module.exports = [
     ignores: ['**/dist'],
   },
   {
-    files: [
-      '**/*.ts',
-      '**/*.tsx',
-      '**/*.js',
-      '**/*.jsx',
-      '**/*.cjs',
-      '**/*.mjs',
-    ],
+    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
     // Override or add rules here
     rules: {},
   },
@@ -24,6 +17,8 @@ module.exports = [
   {
     files: ['**/*.ts'],
     rules: {
+      '@typescript-eslint/consistent-type-assertions': 'error',
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@angular-eslint/directive-selector': [
         'error',
         {
