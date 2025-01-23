@@ -41,7 +41,7 @@
             }
           ],
           "outputHashing": "all",
-          "extractLicenses": false,
+          "extractLicenses": false
         },
         "development": {
           "optimization": false,
