@@ -1,22 +1,23 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SelectComponent } from '../../../../components/select.component';
-import { MonthType, OptionItem } from '../../../../types';
+import { ButtonComponent } from '../../../../components/button/button.component';
+import { DatetimePickerComponent } from '../../../../components/datetime-picker/datetime-picker.component';
 import { MonthRangeForm } from '../../../../types/forms';
-import { MONTHS } from '../../../../utils/constant';
+import { CARD } from '../../../../utils/tailwindcss';
 
 @Component({
   selector: 'app-filter-bar',
-  imports: [SelectComponent, FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, DatetimePickerComponent, ButtonComponent],
   templateUrl: './filter-bar.component.html',
   styleUrl: './filter-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterBarComponent {
-  monthOptions: OptionItem[] = MONTHS.map((month) => ({ label: month, value: month }));
+  cssCard = CARD;
+
   monthRangeForm = new FormGroup<MonthRangeForm>({
-    startMonth: new FormControl<MonthType>('January', { nonNullable: true }),
-    endMonth: new FormControl<MonthType>('December', { nonNullable: true }),
+    startMonth: new FormControl<string>('2024-01', { nonNullable: true }),
+    endMonth: new FormControl<string>('2024-12', { nonNullable: true }),
   });
 
   constructor() {

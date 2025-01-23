@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, forwardRef, HostBinding, input } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { v7 as uuid } from 'uuid';
-import { OptionItem } from '../types';
+import { OptionItem } from '../../types';
 
 @Component({
   selector: 'app-select',

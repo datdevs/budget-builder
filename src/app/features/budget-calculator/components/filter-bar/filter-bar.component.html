@@ -1,4 +1,13 @@
-<form class="flex gap-5 bg-white p-5 rounded-lg shadow-md" [formGroup]="monthRangeForm">
-  <app-select formControlName="startMonth" label="Start month" [options]="monthOptions"></app-select>
-  <app-select formControlName="endMonth" label="End month" [options]="monthOptions"></app-select>
-</form>
+<section [class]="cssCard">
+  <div>
+    <h3 class="font-bold">Choose month range to calculate budget</h3>
+  </div>
+
+  <form class="flex gap-5 items-end" [formGroup]="monthRangeForm">
+    <app-datetime-picker formControlName="startMonth" label="Start month" type="month"></app-datetime-picker>
+
+    <app-datetime-picker formControlName="endMonth" label="End month" type="month"></app-datetime-picker>
+
+    <app-button theme="primary">Apply</app-button>
+  </form>
+</section>
