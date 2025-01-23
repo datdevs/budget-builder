@@ -1,0 +1,15 @@
+<section class="flex gap-2" [class]="layout() === 'horizontal' ? 'items-center' : 'flex-col'">
+  @if (label(); as lb) {
+    <label class="block text-sm font-medium text-gray-700" [for]="inputId">{{ lb }}</label>
+  }
+
+  <div class="w-60">
+    <input
+      class="block w-full px-4 py-1.5 bg-white border border-gray-300 rounded-lg appearance-none transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      [attr.id]="inputId"
+      [type]="type()"
+      (change)="onChangeHandler($event)"
+      [(ngModel)]="value"
+    />
+  </div>
+</section>
