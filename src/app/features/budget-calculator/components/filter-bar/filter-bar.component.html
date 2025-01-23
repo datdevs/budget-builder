@@ -1,0 +1,4 @@
+<form class="flex gap-5 bg-white p-5 rounded-lg shadow-md" [formGroup]="monthRangeForm">
+  <app-select formControlName="startMonth" label="Start month" [options]="monthOptions"></app-select>
+  <app-select formControlName="endMonth" label="End month" [options]="monthOptions"></app-select>
+</form>
