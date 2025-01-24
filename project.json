@@ -27,7 +27,8 @@
         "stylePreprocessorOptions": {
           "includePaths": ["src/styles"]
         },
-        "scripts": []
+        "scripts": [],
+        "baseHref": "/budget-builder/"
       },
       "configurations": {
         "production": {
