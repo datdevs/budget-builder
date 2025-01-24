@@ -28,12 +28,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          
+      - run: npm ci --legacy-peer-deps
+      - uses: nrwl/nx-set-shas@v4
+        
+      - run: npx nx affected -t build
+        
+      - name: Compress project
+        run: npm run compress
+        
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: ./
+          source: ./dist
           destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
