@@ -66,6 +66,9 @@
           "buildTarget": "budget-builder:build:development"
         }
       },
+      "options": {
+        "port": 5400
+      },
       "defaultConfiguration": "development"
     },
     "extract-i18n": {

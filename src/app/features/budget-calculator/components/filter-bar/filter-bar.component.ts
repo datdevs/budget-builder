@@ -4,7 +4,7 @@ import { ButtonComponent } from '../../../../components/button/button.component'
 import { DatetimePickerComponent } from '../../../../components/datetime-picker/datetime-picker.component';
 import { MonthRangeForm } from '../../../../types/forms';
 import { CARD } from '../../../../utils/tailwindcss';
-import { BudgetService } from '../../services';
+import { BudgetFilterService } from '../../services';
 
 @Component({
   selector: 'app-filter-bar',
@@ -21,7 +21,7 @@ export class FilterBarComponent {
     endMonth: new FormControl<string>('', { nonNullable: true }),
   });
 
-  private readonly budgetService = inject(BudgetService);
+  private readonly budgetService = inject(BudgetFilterService);
 
   constructor() {
     this.monthRangeForm.patchValue(this.budgetService.getMonthRange());

@@ -1,14 +1,213 @@
+@let months = monthCollection();
+@let budget = budgetData();
+
 <section class="gap-5" [class]="cssCard">
-  <table class="table-auto border-collapse border border-gray-300">
-    <thead class="bg-gray-100">
-      <tr>
-        <th class="border px-4 py-2">Category</th>
-        <th class="border px-4 py-2">Opening Balance</th>
-        <!-- Months -->
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Rows -->
-    </tbody>
-  </table>
+  <div class="relative w-full overflow-x-auto">
+    <table class="table-auto border-collapse border cursor-pointer">
+      <thead class="bg-blue-500 text-white">
+        <tr class="whitespace-nowrap">
+          <th class="px-4 py-2">Category</th>
+
+          @for (col of months; track col.isoString) {
+            <th class="px-4 py-2">{{ col.localeString }}</th>
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-container
+          *ngTemplateOutlet="categoryRow; context: { data: { budget, parentCategory: 'Income', type: 'income' } }"
+        ></ng-container>
+
+        <ng-container
+          *ngTemplateOutlet="categoryRow; context: { data: { budget, parentCategory: 'Expenses', type: 'expenses' } }"
+        ></ng-container>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td class="font-bold" [class]="cssTableCell">Profit / Loss</td>
+
+          @for (col of months; track col.isoString) {
+            <td [class]="cssTableCell">{{ budget | profitCalculate: col.isoString }}</td>
+          }
+        </tr>
+
+        <tr>
+          <td class="font-bold" [class]="cssTableCell">Opening Balance</td>
+
+          @for (col of months; track col.isoString) {
+            <td [class]="cssTableCell">{{ budget | balanceCalculator: col.isoString : months }}</td>
+          }
+        </tr>
+
+        <tr>
+          <td class="font-bold" [class]="cssTableCell">Closing Balance</td>
+
+          @for (col of months; track col.isoString) {
+            <td [class]="cssTableCell">{{ budget | balanceCalculator: col.isoString : months : true }}</td>
+          }
+        </tr>
+      </tfoot>
+    </table>
+
+    <div
+      #inputBox
+      class="border border-blue-500 border-2 absolute z-50 transition-all cursor-pointer"
+      [style]="inputBoxStyle()"
+      (contextmenu)="onContextMenu($event)"
+    ></div>
+
+    <div
+      #contextMenu
+      class="hidden fixed z-50 w-48 bg-white shadow-md rounded-lg py-2 border border-gray-300"
+      [style]="contextMenuStyle()"
+    >
+      <button
+        class="w-full text-left px-4 py-2 hover:bg-gray-100 focus:outline-none transition"
+        (click)="onDeleteRow()"
+      >
+        Delete category
+      </button>
+      <button
+        class="hidden w-full text-left px-4 py-2 hover:bg-gray-100 focus:outline-none transition"
+        id="apply-to-all"
+        (click)="applyToAll()"
+      >
+        Apply to all
+      </button>
+    </div>
+  </div>
 </section>
+
+<ng-template #categoryRow let-data="data">
+  <tr>
+    <td class="font-bold" [attr.colspan]="months.length + 1" [class]="cssTableCell">{{ data.parentCategory }}</td>
+  </tr>
+
+  @for (category of data.budget[data.type]; track category.id) {
+    <tr>
+      <td
+        class="font-medium bg-green-100"
+        [attr.data-category]="data.type"
+        [attr.data-categoryid]="category.id"
+        [attr.data-type]="'category'"
+        [attr.id]="category.id"
+        [class]="cssTableCell"
+        (contextmenu)="onContextMenu($event)"
+      >
+        {{ category.name }}
+      </td>
+
+      @for (col of months; track col.isoString) {
+        <td
+          class="bg-green-100"
+          [attr.data-category]="data.type"
+          [attr.data-categoryid]="category.id"
+          [attr.data-month]="col.isoString"
+          [attr.data-type]="'categoryValue'"
+          [attr.id]="col.isoString"
+          [class]="cssTableCell"
+          (contextmenu)="onContextMenu($event, true)"
+        >
+          {{ category.values[col.isoString] }}
+        </td>
+      }
+    </tr>
+
+    @for (subCategory of category.children; track subCategory.id) {
+      <tr>
+        <td
+          class="bg-green-100"
+          [attr.data-category]="data.type"
+          [attr.data-categoryid]="category.id"
+          [attr.data-subcategoryid]="subCategory.id"
+          [attr.data-type]="'subCategory'"
+          [attr.id]="subCategory.id"
+          [class]="cssTableCell"
+          (contextmenu)="onContextMenu($event)"
+        >
+          {{ subCategory.name }}
+        </td>
+
+        @for (col of months; track col.isoString) {
+          <td
+            class="bg-green-100"
+            [attr.data-category]="data.type"
+            [attr.data-categoryid]="category.id"
+            [attr.data-month]="col.isoString"
+            [attr.data-subcategoryid]="subCategory.id"
+            [attr.data-type]="'subCategoryValue'"
+            [attr.id]="col.isoString"
+            [class]="cssTableCell"
+            (contextmenu)="onContextMenu($event, true)"
+          >
+            {{ subCategory.values[col.isoString] }}
+          </td>
+        }
+      </tr>
+    }
+
+    <tr>
+      <td
+        class="whitespace-nowrap"
+        [attr.data-category]="data.type"
+        [attr.data-categoryid]="category.id"
+        [attr.data-createcategory]="data.type"
+        [attr.data-editable]="false"
+        [class]="cssTableCell"
+      >
+        Add New {{ category.name }} Category
+      </td>
+
+      @for (col of months; track col.isoString) {
+        <td [attr.data-editable]="false" [class]="cssTableCell"></td>
+      }
+    </tr>
+
+    <tr>
+      <td [attr.data-editable]="false" [class]="cssTableCell">Sub Totals</td>
+
+      @for (col of months; track col.isoString) {
+        <td [attr.data-editable]="false" [class]="cssTableCell">{{ category | subTotalCalculate: col.isoString }}</td>
+      }
+    </tr>
+
+    <tr>
+      <td [attr.colspan]="months.length + 1" [class]="cssTableCell">&nbsp;</td>
+    </tr>
+  }
+
+  <tr>
+    <td
+      class="whitespace-nowrap"
+      [attr.data-createcategory]="data.type"
+      [attr.data-editable]="false"
+      [class]="cssTableCell"
+    >
+      Add New Parent Category
+    </td>
+
+    @for (col of months; track col.isoString) {
+      <td [attr.data-editable]="false" [class]="cssTableCell"></td>
+    }
+  </tr>
+
+  <tr>
+    <td [attr.colspan]="months.length + 1" [class]="cssTableCell">&nbsp;</td>
+  </tr>
+
+  <tr>
+    <td class="font-bold" [attr.data-editable]="false" [class]="cssTableCell">Total {{ data.parentCategory }}</td>
+
+    @for (col of months; track col.isoString) {
+      <td [attr.data-editable]="false" [class]="cssTableCell">
+        {{ data.budget[data.type] | totalCalculate: col.isoString }}
+      </td>
+    }
+  </tr>
+
+  <tr>
+    <td [attr.colspan]="months.length + 1" [class]="cssTableCell">&nbsp;</td>
+  </tr>
+</ng-template>
