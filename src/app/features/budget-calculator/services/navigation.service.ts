@@ -76,6 +76,7 @@ export class NavigationService {
   /**
    * Update the position of the input box
    * @param target
+   * @param inputBoxStyle
    */
   handleCellClick(target: HTMLTableCellElement, inputBoxStyle: WritableSignal<any>): void {
     const rows = this.getRows();
