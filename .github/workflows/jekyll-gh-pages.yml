@@ -42,7 +42,7 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
         
       - name: Build project
-        run: npx nx build
+        run: npx nx affected -t build
         
       - name: Compress project
         run: npm run compress
