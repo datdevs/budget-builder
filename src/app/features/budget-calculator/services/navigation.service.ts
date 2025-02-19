@@ -23,6 +23,7 @@ export class NavigationService {
    */
   handleTab(isShift: boolean, rows: NodeListOf<HTMLTableRowElement>): void {
     const direction = isShift ? -1 : 1;
+
     while (true) {
       this.currentCol += direction;
 

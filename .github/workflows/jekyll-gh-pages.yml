@@ -41,7 +41,8 @@ jobs:
       - run: npm ci --legacy-peer-deps
       - uses: nrwl/nx-set-shas@v4
         
-      - run: npx nx affected -t build
+      - name: Build project
+        run: npx nx build
         
       - name: Compress project
         run: npm run compress
